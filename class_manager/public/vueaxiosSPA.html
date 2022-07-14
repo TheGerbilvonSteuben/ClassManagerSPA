@@ -1,0 +1,80 @@
+<html>
+<head>
+<title>Assignment 4 Jerret Stovall</title>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+
+<div id="Itemlist">
+    <button v-on:click="choice=1">Teachers</button>
+    <button v-on:click="choice=2">Offices</button>
+    <button v-on:click="choice=3">Courses</button>
+    <button v-on:click="choice=4">Sections</button>
+    <span v-if="choice === 1">
+        <ul>
+        <div v-for="teacher in teachers">
+            <li>Name:&emsp;{{teacher.first_name + " " + teacher.last_name}} <br>
+                Email:&emsp;{{teacher.email}} <br>
+                Office:&emsp;{{offices[teacher.office_id-1].building_name}}&emsp;{{offices[teacher.office_id-1].room_number}}<br>
+                900#:&emsp;{{teacher.nine_hundred}}
+            </li>
+        </div>
+        </ul>
+    </span>
+        <span v-if="choice === 2">
+        <ul>
+        <div v-for="office in offices">
+            <li>Building:&emsp;&emsp;&emsp;{{office.building_name}}<br>Floor Number:&emsp;{{office.floor_number}}<br>Room Number:&emsp;{{office.room_number}}</li>
+        </div>
+        </ul>
+    </span>
+        <span v-if="choice === 3">
+        <ul>
+        <div v-for="course in courses">
+            <li>{{course.prefix}}{{course.course_number}}<br>Description:&emsp;{{course.description}}</li>
+            <div v-for="section in sections">
+                <span v-if="section.course_id === course.id">
+                    {{ section.semester }}, {{section.year}}
+                </span>
+            </div>
+        </div>
+        </ul>
+    </span>
+        <span v-if="choice === 4">
+        <ul>
+        <div v-for="section in sections">
+            <li>{{courses[section.course_id-1].prefix}}{{courses[section.course_id-1].course_number}}<br>{{section.semester}}&emsp;{{section.year}}</li>
+        </div>
+        </ul>
+    </span>
+</div>
+
+<script type="text/javascript">
+let ItemsVue = new Vue({
+    el: '#Itemlist',
+    data: { teachers: [],
+        offices: [],
+        courses: [],
+        sections: [],
+        choice: null,
+        },
+    mounted: function() {
+        axios.get('http://localhost:3000/teachers.json')
+            .then(response => { this.teachers = response.data })
+            .catch(error => { console.log(error); });
+        axios.get('http://localhost:3000/offices.json')
+            .then(response => { this.offices = response.data })
+            .catch(error => { console.log(error); });
+        axios.get('http://localhost:3000/courses.json')
+            .then(response => { this.courses = response.data })
+            .catch(error => { console.log(error); });
+        axios.get('http://localhost:3000/sections.json')
+            .then(response => { this.sections = response.data })
+            .catch(error => { console.log(error); });
+    }
+});
+</script>
+
+</body>
+</html>

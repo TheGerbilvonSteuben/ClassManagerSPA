@@ -1,0 +1,23 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Course:</strong>
+  <%= @course.full_name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @course.description %>
+</p>
+
+<strong>Sections:</strong>
+<% @course.section.each do |section| %>
+  <tr>
+    <td><%= link_to "#{section.full_name}", section_path %> | </td>
+  </tr>
+<% end %>
+
+<br>
+<br>
+<%= link_to 'Edit', edit_course_path(@course) %> |
+<%= link_to 'Back', courses_path %>
